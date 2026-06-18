@@ -1,0 +1,49 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Authenticated users can read and write their own documents
+    match /users/{userId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Submissions can be read by anyone
+    match /submissions/{submissionId} {
+      allow read: if true;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null && (resource.data.userId == request.auth.uid || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'Admin');
+    }
+
+    // Comments can be read by anyone, created by logged-in users, deleted by author or admin
+    match /comments/{commentId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow delete: if request.auth != null && (resource.data.userId == request.auth.uid || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'Admin');
+    }
+
+    // Likes can be read by anyone, written by logged-in users
+    match /likes/{likeId} {
+      allow read: if true;
+      allow create, delete: if request.auth != null;
+    }
+
+    // Follows can be read by anyone, written by logged-in users
+    match /follows/{followId} {
+      allow read: if true;
+      allow create, delete: if request.auth != null;
+    }
+
+    // Challenges can be read by anyone, written by admins or judges
+    match /challenges/{challengeId} {
+      allow read: if true;
+      allow write: if request.auth != null && (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'Admin' || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'Judge');
+    }
+
+    // Notifications can be read/updated by the recipient
+    match /notifications/{notificationId} {
+      allow read, update: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null;
+      allow delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+  }
+}

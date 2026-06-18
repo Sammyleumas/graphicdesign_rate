@@ -1,0 +1,6 @@
+{
+  "name": "DesignRank",
+  "description": "A community-powered graphic design competition platform with secure authentication, design uploads, and real-time community interaction.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
