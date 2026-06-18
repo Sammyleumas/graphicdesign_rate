@@ -226,7 +226,7 @@ Evaluate and return a structured JSON response matching the requested schema.`;
     contents.push(prompt);
 
     const response = await client.models.generateContent({
-      model: "gemini-3.5-flash",
+      model: "gemini-2.5-flash",
       contents: contents,
       config: {
         systemInstruction: systemInstructions,
