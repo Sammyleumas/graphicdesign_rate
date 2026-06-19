@@ -27,7 +27,7 @@ try {
 
   auth = getAuth(app);
   // Pass the firestoreDatabaseId explicitly if required by the cloud project
-  db = getFirestore(app);
+  db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
   isInitialized = true;
   console.log("Firebase client initialized successfully.");
 } catch (error) {
