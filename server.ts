@@ -167,13 +167,13 @@ Our AI design panel has finished evaluating your design based on the **Basics of
   }
 
   try {
-    const contents: any[] = [];
+    const parts: any[] = [];
     
     let imagePromptText = "";
     if (imageBase64 && imageMime) {
       // Remove data header if present (e.g. data:image/png;base64,)
       const cleanBase64 = imageBase64.replace(/^data:image\/\w+;base64,/, "");
-      contents.push({
+      parts.push({
         inlineData: {
           data: cleanBase64,
           mimeType: imageMime || "image/jpeg"
@@ -223,11 +223,11 @@ DESIGN METADATA:
 
 Evaluate and return a structured JSON response matching the requested schema.`;
 
-    contents.push(prompt);
+    parts.push({ text: prompt });
 
     const response = await client.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: contents,
+      model: "gemini-3.5-flash",
+      contents: { parts },
       config: {
         systemInstruction: systemInstructions,
         responseMimeType: "application/json",
